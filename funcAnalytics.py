@@ -10,7 +10,8 @@ import re
 
 class Functions:
     ## --------------------------------------------------------------------
-    countryList = []    #国のリスト
+    countryList = []        #国のリスト
+    non_countryList = []    #csvになかった国のリスト
     csv_file_path = ""  #csvファイルパス:コマンドライン引数から取得
     csv_file_string = ""    #csvファイル文字列
 
@@ -18,6 +19,7 @@ class Functions:
     data_os = ""
     data_score_user = {}
     export_string = ""
+    export_string_title = ""
 
     ## --------------------------------------------------------------------
 
@@ -28,8 +30,8 @@ class Functions:
         self.analyzeDataCSV()       #CSVファイルから必要な情報を抜き出し
         self.checkData()            #CSV国のリストを参照しながら、出力文字列を生成。リストにない国は別途リストに保管する
         self.addCountryIntoCSV()    #CSV国のリストになかった国リストをCSV国CSVファイルに追記する
-        print("hello")
-        pass
+        self.exportData()           #結果CSVデータを出力する
+        print("fin")
 
     #パラメータからCSVパスを取得。なければエラーで終了
     def getCSVpath(self):
@@ -46,10 +48,8 @@ class Functions:
         with open(const.const.country_csv_file, "r", encoding="utf-8_sig") as f:
             data = reader(f)
             for row in data:
-                self.countryList.append(row)
-                #print(row)
-                pass
-            pass
+                if len(row) > 0:
+                    self.countryList.append(row[0])
         print(self.countryList)
 
     #データCSVファイルを読む
@@ -100,24 +100,45 @@ class Functions:
 
     #CSV国のリストを参照しながら、出力文字列を生成。リストにない国は別途リストに保管する
     def checkData(self):
+        #CSV国のリスト順にデータ辞書から取り出し
         for c_name in self.countryList:
             #print(type(c_name))
             #print(c_name[0])
-            if (c_name[0] in self.data_score_user):
-                self.export_string += c_name[0]+","+self.data_score_user[c_name[0]][0]+","+self.data_score_user[c_name[0]][1]+","+self.data_score_user[c_name[0]][2]+"\n"   #テスト版国名あり
-                #self.export_string += self.data_score_user[c_name[0]][0]+","+self.data_score_user[c_name[0]][1]+","+self.data_score_user[c_name[0]][2]+"\n"   #本番国名なし
+
+            self.export_string_title += c_name+",,,"
+            if (c_name in self.data_score_user):
+            #if (c_name[0] in self.data_score_user):
+                self.export_string += self.data_score_user[c_name][0]+","+self.data_score_user[c_name][1]+","+self.data_score_user[c_name][2]+","   #本番国名なし、カンマつなぎ
+                #self.export_string += c_name+","+self.data_score_user[c_name][0]+","+self.data_score_user[c_name][1]+","+self.data_score_user[c_name][2]+"\n"   #テスト版国名あり
             else:
                 #辞書になかった国のリストを作成する
-                self.export_string += "0,0,0\n"
-                print("come ")
-                pass
-            #CSV国のリストになかった国の処理
-            
-            pass
-        print(self.export_string)
-        pass
+                self.export_string += "0,0,0,"
+                print("come not data in csv")
+
+        #CSV国のリストになかった国の処理、リストになければ国、スコア追加。なかった国のリストに追加しておく
+        for c_key in self.data_score_user:
+            if c_key not in self.countryList:
+                print("add "+c_key)
+                self.export_string += self.data_score_user[c_key][0]+","+self.data_score_user[c_key][1]+","+self.data_score_user[c_key][2]+","   #本番、国名なし
+                #self.export_string += c_key+","+self.data_score_user[c_key][0]+","+self.data_score_user[c_key][1]+","+self.data_score_user[c_key][2]+"\n"   #テスト版国名あり
+                self.non_countryList.append(c_key)  #なかった国のリストに追加しておく
+                self.export_string_title += c_key+",,,"
+
+        #print(self.export_string_title)
+        #print(self.export_string)
+        #print(self.non_countryList)
 
     #CSV国のリストになかった国リストをCSV国CSVファイルに追記する
     def addCountryIntoCSV(self):
-        pass
+        if len(self.non_countryList) < 1:
+            return
+        addCountryTxt = "\n".join(self.non_countryList)
+        addCountryTxt = addCountryTxt.strip()
+        #addCountryTxt = "\n"+"\n".join(self.non_countryList)
+        with open(const.const.country_csv_file, "a", encoding="utf-8_sig") as f:
+            print(addCountryTxt.strip(), file=f)    #最後の改行１つを削除して追記
 
+    #結果CSVデータを出力する
+    def exportData(self):
+        with open(const.const.export_csv_file+"_"+self.data_os+"_"+self.data_date+".csv", "w", encoding="utf-8_sig") as f:
+            print(self.export_string_title+"\n"+self.export_string, file=f)
