@@ -84,13 +84,13 @@ class Functions:
         res = re.findall(const.const.pattern_csv_user_start, self.csv_file_string, re.DOTALL)
         res2 = res[0].replace(const.const.pattern_csv_user_delete,"")
         score_string = res2.replace("\n\n#","")
-        print(score_string)
+        #print(score_string)
 
         #改行で分けて、一つづつ国の集計をとっていく
         coutry_string_list = score_string.split("\n")
         for one_contry in coutry_string_list:
             coutry_scores = one_contry.split(",")
-            print(coutry_scores)
+            #print(coutry_scores)
             #定着ユーザーも計算して、文字列に変換
             stay_user = int(coutry_scores[1]) - int(coutry_scores[2])
             #辞書に追加していく
@@ -113,12 +113,12 @@ class Functions:
             else:
                 #辞書になかった国のリストを作成する
                 self.export_string += "0,0,0,"
-                print("not exist country in data csv:"+c_name)
+                #print("not exist country in data csv:"+c_name)
 
         #CSV国のリストになかった国の処理、リストになければ国、スコア追加。なかった国のリストに追加しておく
         for c_key in self.data_score_user:
             if c_key not in self.countryList:
-                print("add "+c_key)
+                print("add new country "+c_key)
                 self.export_string += self.data_score_user[c_key][0]+","+self.data_score_user[c_key][1]+","+self.data_score_user[c_key][2]+","   #本番、国名なし
                 #self.export_string += c_key+","+self.data_score_user[c_key][0]+","+self.data_score_user[c_key][1]+","+self.data_score_user[c_key][2]+"\n"   #テスト版国名あり
                 self.non_countryList.append(c_key)  #なかった国のリストに追加しておく
