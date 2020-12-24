@@ -81,10 +81,10 @@ class Functions:
     #「国,ユーザー,新しいユーザー」文字列以下で国別集計抽出,定着ユーザーも計算し保管しておく
     def getScore(self):
         #対象文字列を抜き出し
-        res = re.findall(const.const.pattern_csv_user_start, self.csv_file_string)
+        res = re.findall(const.const.pattern_csv_user_start, self.csv_file_string, re.DOTALL)
         res2 = res[0].replace(const.const.pattern_csv_user_delete,"")
         score_string = res2.replace("\n\n#","")
-        #print(score_string)
+        print(score_string)
 
         #改行で分けて、一つづつ国の集計をとっていく
         coutry_string_list = score_string.split("\n")
@@ -113,7 +113,7 @@ class Functions:
             else:
                 #辞書になかった国のリストを作成する
                 self.export_string += "0,0,0,"
-                print("come not data in csv")
+                print("not exist country in data csv:"+c_name)
 
         #CSV国のリストになかった国の処理、リストになければ国、スコア追加。なかった国のリストに追加しておく
         for c_key in self.data_score_user:
