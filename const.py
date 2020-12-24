@@ -6,6 +6,7 @@ class const:
     dat_csv_file = "data/dat.csv"
     error_message_not_exist_csv = "google csvファイルがありません"
     export_csv_file = "./result"
+    #export_csv_file = "./data/result"
 
     pattern_csv_os = "# 「プラットフォーム」に含まれる要素 [^\n]+\n"
     pattern_csv_os_delete = "# 「プラットフォーム」に含まれる要素 "
