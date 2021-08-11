@@ -1,0 +1,19 @@
+URL:"C:\Users\s88sw\Downloads\data-export (1).csv"
+C:\Users\s88sw\Downloads\data-export(1).csv
+['Japan', 'United States', 'United Kingdom', 'Sweden', 'Germany', 'Italy', 'Australia', 'South Korea', 'Taiwan', 'Bahrain', 'Canada', 'Czechia', 'Denmark', 'Ethiopia', 'Finland', 'Hungary', 'Poland', 'Singapore', 'Spain', 'Uzbekistan', 'Vietnam', 'Georgia', 'Myanmar (Burma)', 'Somalia', 'United Arab Emirates', 'Algeria', 'China', 'Iraq', 'Israel', 'Jamaica', 'Namibia', 'Thailand', 'Colombia', 'Iran', 'Jordan', 'Philippines', 'Nepal', 'Sri Lanka', 'Chile', 'Malaysia', 'Guinea-Bissau', 'India', 'Pakistan', 'Bangladesh', 'Niger', 'Brazil', 'Kenya', 'Mali', 'Uganda', 'Nicaragua', 'Indonesia', 'Côte d’Ivoire', 'Egypt', 'Venezuela', 'Dominican Republic', 'Senegal', 'Eswatini', 'Tanzania', 'Rwanda', 'Paraguay', 'Afghanistan', 'Tunisia', 'South Africa', 'Switzerland', 'Nigeria', 'Puerto Rico', 'Bulgaria', 'Russia', 'Mexico', 'Saudi Arabia', 'Cambodia', 'Belgium', 'Kuwait', 'Cameroon', 'Kosovo', 'Netherlands', 'Bhutan', 'Mongolia', 'Djibouti', 'Hong Kong', 'Lebanon', 'Zimbabwe', 'Norway', 'Zambia', 'France', 'Sudan', 'Ghana', 'Greece', 'Slovakia', 'Romania', 'Argentina', 'New Zealand', 'Austria', 'Curaçao', 'Morocco', 'Belize', 'Ireland', 'Armenia', 'Burundi', 'Estonia', 'Madagascar', 'Kyrgyzstan']
+Traceback (most recent call last):
+  File "do.py", line 12, in <module>
+    funcs = func.Functions()
+  File "C:\project\free_area\24_analytics_csv\funcAnalytics.py", line 29, in __init__
+    self.readDataCSVFile()      #データCSVファイルを読む
+  File "C:\project\free_area\24_analytics_csv\funcAnalytics.py", line 61, in readDataCSVFile
+    with open(self.csv_file_path, "r", encoding="utf-8_sig") as f:
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\s88sw\\Downloads\\data-export(1).csv'
+続行するには何かキーを押してください . . .
+
+解決：
+原因は日本語名を含むCSVファイルコマンドプロンプトにドロップした時、
+ダブルクォーテーションがつけられる
+バッチにてダブルクォーテーションをつける処理を書いていたため
+パスに２重につけられてしまい
+pythonでファイルパスを読み込めていなかった

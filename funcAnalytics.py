@@ -39,8 +39,10 @@ class Functions:
         if len(args) < 2:
             print(const.const.error_message_not_exist_csv)
             exit()
-        #print(len(args))
-        self.csv_file_path = args[1]
+        #self.csv_file_path = args[1]
+        self.csv_file_path = ""
+        for i in range(1,len(args)):
+            self.csv_file_path += args[i]
         print(self.csv_file_path)
 
     #国のCSVファイルを読む
